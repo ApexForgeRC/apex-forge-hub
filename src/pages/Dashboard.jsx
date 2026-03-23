@@ -1,170 +1,100 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { 
-  Cylinder, 
-  Calculator, 
-  Package, 
-  Wrench, 
-  Users, 
-  Calendar,
-  TrendingUp,
-  AlertTriangle,
-  Clock,
-  DollarSign
-} from 'lucide-react'
+import React from 'react';
+import { Zap, Package, TrendingUp, AlertTriangle, Database, Droplets } from 'lucide-react';
 
 export default function Dashboard() {
-  // Mock data - will be replaced with real data from localStorage/Supabase
-  const stats = {
-    activeBuildds: 2,
-    lowStockItems: 3,
-    pendingJobs: 5,
-    monthlyRevenue: 847.50,
-  }
+  // Filament Inventory Data
+  const filamentStock = [
+    { type: 'PETG-CF', brand: 'Bambu Lab', color: 'Black', amount: 850, total: 1000, colorCode: '#FF6B00' },
+    { type: 'PLA Plus', brand: 'eSun', color: 'Forge Orange', amount: 200, total: 1000, colorCode: '#FF6B00' },
+    { type: 'TPU 95A', brand: 'Overture', color: 'Black', amount: 600, total: 1000, colorCode: '#E8E8E8' },
+    { type: 'ASA', brand: 'Polymaker', color: 'Grey', amount: 950, total: 1000, colorCode: '#555555' },
+  ];
 
-  const quickLinks = [
-    { path: '/filament', icon: Cylinder, label: 'Log Print', color: 'from-orange-500 to-red-500' },
-    { path: '/jobs', icon: Calculator, label: 'New Quote', color: 'from-blue-500 to-cyan-500' },
-    { path: '/inventory', icon: Package, label: 'Check Stock', color: 'from-green-500 to-emerald-500' },
-    { path: '/builds', icon: Wrench, label: 'Update Build', color: 'from-purple-500 to-pink-500' },
-  ]
-
-  const recentActivity = [
-    { type: 'print', message: 'Logged print: Explorer MK1 Motor Mount', time: '2 hours ago' },
-    { type: 'job', message: 'New quote created: Custom chassis repair', time: '5 hours ago' },
-    { type: 'inventory', message: 'Low stock alert: M3x10 screws', time: '1 day ago' },
-    { type: 'content', message: 'Video scheduled: Belt Drive Conversion', time: '2 days ago' },
-  ]
-
-  const activeBuilds = [
-    { name: 'AMG GT63 on DKS-Basic', status: 'In Progress', progress: 85 },
-    { name: 'Explorer MK1 Build', status: 'Parts Ordered', progress: 25 },
-  ]
+  const stats = [
+    { label: 'Active Builds', value: '1', sub: 'Porsche 911 GT3 RS', icon: <Package className="text-[#FF6B00]" /> },
+    { label: 'Power Usage', value: '31 kWh', sub: 'North GA Winter Rate', icon: <Zap className="text-yellow-400" /> },
+    { label: 'Total Inventory', value: '2.6 kg', sub: 'Across 4 Spools', icon: <Database className="text-blue-400" /> },
+    { label: 'Shop Temp', value: '68°F', sub: 'Optimal for P1S', icon: <AlertTriangle className="text-orange-400" /> },
+  ];
 
   return (
-    <div className="space-y-6 animate-fade-in">
-      {/* Welcome Banner */}
-      <div className="bg-gradient-to-r from-apex-orange/20 to-apex-orange-dark/10 border border-apex-orange/20 rounded-2xl p-6">
-        <h1 className="text-2xl font-display font-bold mb-2">Welcome back, Paul</h1>
-        <p className="text-gray-400">Here's what's happening at Apex Forge today.</p>
-      </div>
-
-      {/* Quick Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="stat-card stagger-1 opacity-0 animate-fade-in">
-          <Wrench className="w-8 h-8 text-apex-orange" />
-          <span className="stat-value">{stats.activeBuildds}</span>
-          <span className="stat-label">Active Builds</span>
+    <div className="min-h-screen bg-[#080808] text-[#E8E8E8] p-8 space-y-8 animate-in fade-in duration-500">
+      
+      {/* Header - Updated Branding */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-4xl font-black italic tracking-tighter uppercase text-[#FF6B00]">Owner Portal</h1>
+          <p className="text-zinc-500 font-bold uppercase text-xs tracking-[0.2em] mt-1">
+            Apex Forge — Original Motorworks // North Georgia // Atlanta Hub
+          </p>
         </div>
-        <div className="stat-card stagger-2 opacity-0 animate-fade-in">
-          <AlertTriangle className="w-8 h-8 text-yellow-500" />
-          <span className="stat-value text-yellow-500">{stats.lowStockItems}</span>
-          <span className="stat-label">Low Stock Items</span>
-        </div>
-        <div className="stat-card stagger-3 opacity-0 animate-fade-in">
-          <Clock className="w-8 h-8 text-blue-500" />
-          <span className="stat-value text-blue-500">{stats.pendingJobs}</span>
-          <span className="stat-label">Pending Jobs</span>
-        </div>
-        <div className="stat-card stagger-4 opacity-0 animate-fade-in">
-          <DollarSign className="w-8 h-8 text-green-500" />
-          <span className="stat-value text-green-500">${stats.monthlyRevenue}</span>
-          <span className="stat-label">This Month</span>
+        <div className="bg-[#141414] border border-zinc-800 px-6 py-3 rounded-2xl flex items-center gap-4">
+          <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
+          <span className="text-xs font-black uppercase tracking-widest">P1S Status: Ready to Print</span>
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div>
-        <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-3">Quick Actions</h3>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-          {quickLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className="group card hover:border-white/20 transition-all duration-300 hover:scale-[1.02]"
-            >
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${link.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-                <link.icon className="w-6 h-6 text-white" />
-              </div>
-              <span className="font-medium">{link.label}</span>
-            </Link>
-          ))}
-        </div>
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {stats.map((stat, i) => (
+          <div key={i} className="bg-[#141414] border border-zinc-800 p-6 rounded-3xl hover:border-[#FF6B00]/50 transition-colors">
+            <div className="flex justify-between items-start mb-4">
+              <div className="p-3 bg-black rounded-2xl border border-zinc-800">{stat.icon}</div>
+            </div>
+            <div className="text-3xl font-black italic">{stat.value}</div>
+            <div className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mt-1">{stat.label}</div>
+            <div className="text-[#FF6B00] text-[10px] font-bold mt-2 opacity-80">{stat.sub}</div>
+          </div>
+        ))}
       </div>
 
-      {/* Two Column Layout */}
-      <div className="grid lg:grid-cols-2 gap-6">
-        {/* Active Builds */}
-        <div className="card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Active Builds</h3>
-            <Link to="/builds" className="text-sm text-apex-orange hover:underline">View All</Link>
-          </div>
-          <div className="space-y-4">
-            {activeBuilds.map((build, i) => (
-              <div key={i} className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>{build.name}</span>
-                  <span className="text-gray-400">{build.progress}%</span>
-                </div>
-                <div className="h-2 bg-apex-black rounded-full overflow-hidden">
-                  <div 
-                    className="h-full bg-gradient-to-r from-apex-orange to-apex-orange-light rounded-full transition-all duration-500"
-                    style={{ width: `${build.progress}%` }}
-                  />
-                </div>
-                <span className="text-xs text-gray-500">{build.status}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <div className="card">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Recent Activity</h3>
-          </div>
-          <div className="space-y-3">
-            {recentActivity.map((activity, i) => (
-              <div key={i} className="flex items-start gap-3 text-sm">
-                <div className="w-2 h-2 rounded-full bg-apex-orange mt-1.5 flex-shrink-0" />
-                <div>
-                  <p className="text-gray-300">{activity.message}</p>
-                  <p className="text-gray-600 text-xs">{activity.time}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Upcoming Content */}
-      <div className="card">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-apex-orange" />
-            Upcoming Content
+      <div className="grid lg:grid-cols-3 gap-8">
+        {/* Filament Gas Gauges */}
+        <div className="lg:col-span-2 bg-[#141414] border border-zinc-800 rounded-[2.5rem] p-8">
+          <h3 className="text-lg font-black uppercase tracking-widest mb-6 flex items-center gap-3 italic">
+            <Droplets size={20} className="text-[#FF6B00]" /> Filament Inventory
           </h3>
-          <Link to="/content" className="text-sm text-apex-orange hover:underline">View Calendar</Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filamentStock.map((spool, i) => {
+              const percentage = (spool.amount / spool.total) * 100;
+              const isLow = percentage < 25;
+              return (
+                <div key={i} className="bg-black/40 border border-zinc-800/50 p-5 rounded-2xl">
+                  <div className="flex justify-between items-end mb-2">
+                    <div>
+                      <div className="text-sm font-black italic uppercase tracking-tight">{spool.type}</div>
+                      <div className="text-[10px] text-zinc-500 font-bold uppercase">{spool.brand} // {spool.color}</div>
+                    </div>
+                    <div className={`text-sm font-black italic ${isLow ? 'text-red-500 animate-pulse' : 'text-[#FF6B00]'}`}>
+                      {spool.amount}g
+                    </div>
+                  </div>
+                  <div className="h-3 w-full bg-zinc-900 rounded-full overflow-hidden border border-zinc-800">
+                    <div 
+                      className={`h-full transition-all duration-1000 ${isLow ? 'bg-red-500' : 'bg-[#FF6B00]'}`}
+                      style={{ width: `${percentage}%` }}
+                    />
+                  </div>
+                  {isLow && <div className="text-[9px] font-black text-red-500 uppercase mt-2 tracking-widest">Low Stock - Order Spool</div>}
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-apex-black/50 rounded-lg p-4 border border-white/5">
-            <span className="badge badge-orange mb-2">YouTube</span>
-            <h4 className="font-medium mb-1">Belt Drive Conversion Guide</h4>
-            <p className="text-xs text-gray-500">Scheduled: Mar 12</p>
+
+        {/* Build Focus Card */}
+        <div className="bg-[#FF6B00] rounded-[2.5rem] p-8 text-black flex flex-col justify-between">
+          <div>
+            <h3 className="text-xs font-black uppercase tracking-widest mb-2 opacity-70 italic text-black">Current Focus</h3>
+            <div className="text-4xl font-black italic tracking-tighter leading-none mb-4 uppercase">Porsche GT3 RS</div>
+            <p className="text-sm font-bold leading-tight opacity-80 uppercase italic">Finish 95% complete body print. Prep DKS-Basic chassis for assembly.</p>
           </div>
-          <div className="bg-apex-black/50 rounded-lg p-4 border border-white/5">
-            <span className="badge badge-blue mb-2">Instagram</span>
-            <h4 className="font-medium mb-1">Explorer MK1 Teaser</h4>
-            <p className="text-xs text-gray-500">Scheduled: Mar 10</p>
-          </div>
-          <div className="bg-apex-black/50 rounded-lg p-4 border border-white/5">
-            <span className="badge badge-green mb-2">TikTok</span>
-            <h4 className="font-medium mb-1">Quick Print Timelapse</h4>
-            <p className="text-xs text-gray-500">Draft</p>
+          <div className="mt-8 pt-8 border-t border-black/20">
+             <div className="text-[10px] font-black uppercase tracking-widest opacity-60">Surgery Countdown</div>
+             <div className="text-2xl font-black italic tracking-tighter">MARCH 16 // T-48H</div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

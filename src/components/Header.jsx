@@ -3,7 +3,8 @@ import { useLocation } from 'react-router-dom'
 import { Menu, Bell, Settings } from 'lucide-react'
 
 const pageTitles = {
-  '/': 'Dashboard',
+  '/dashboard': 'Dashboard',
+  '/lab': 'Design Lab',
   '/filament': 'Filament Tracker',
   '/jobs': 'Job Calculator',
   '/inventory': 'Parts Inventory',
