@@ -23,57 +23,56 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="min-h-screen flex flex-col justify-end pb-20 px-8 pt-32 relative overflow-hidden">
-        {/* Background elements */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#FF6B00] opacity-[0.04] blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#FF6B00] opacity-[0.03] blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2" />
-
+      <section className="min-h-screen flex flex-col justify-center items-center text-center px-8 pt-24 pb-20 relative overflow-hidden">
+        {/* Background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#FF6B00] opacity-[0.05] blur-[150px] rounded-full" />
         {/* Grid overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,107,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,107,0,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-        <div className="max-w-7xl mx-auto w-full relative z-10">
-          <div className="flex flex-col gap-6 max-w-5xl">
-            <div className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-[#FF6B00] animate-pulse" />
-              <span className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em]">Woodstock, Georgia // Est. 2024</span>
-            </div>
+        <div className="relative z-10 flex flex-col items-center gap-8 max-w-3xl mx-auto">
 
-            <h1 className="text-[clamp(4rem,12vw,10rem)] font-black leading-[0.9] tracking-tighter uppercase">
-              Built<br />
-              Different<span className="text-[#FF6B00]">.</span>
-            </h1>
+          {/* Badge logo */}
+          <img
+            src="/logo-badge.png"
+            alt="Apex Forge RC"
+            className="w-64 h-64 md:w-80 md:h-80 drop-shadow-[0_0_40px_rgba(255,107,0,0.3)]"
+          />
 
-            <p className="text-zinc-400 text-lg max-w-lg leading-relaxed">
-              Custom 1/10 scale RC builds, precision 3D printed bodies, and chassis mods. Every build is engineered from the ground up.
-            </p>
-
-            <div className="flex flex-wrap gap-4 pt-4">
-              <a href="mailto:paul@apexforgerc.com"
-                className="group flex items-center gap-3 bg-[#FF6B00] text-black font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-[0_0_40px_rgba(255,107,0,0.25)]">
-                Start a Build
-                <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </a>
-              <button onClick={() => navigate('/dashboard')}
-                className="flex items-center gap-3 bg-white/5 border border-white/10 text-white font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white/10 hover:border-white/20 transition-all duration-300">
-                Owner Portal <Wrench size={16} />
-              </button>
-            </div>
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-[#FF6B00] animate-pulse" />
+            <span className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em]">Woodstock, Georgia // Est. 2024</span>
           </div>
 
-          {/* Stats row */}
-          <div className="flex flex-wrap gap-12 mt-20 pt-12 border-t border-white/5">
-            {[
-              { value: '1/10', label: 'Scale Specialist' },
-              { value: 'BND + RTR', label: 'Build Options' },
-              { value: 'Bambu P1S', label: 'Print Quality' },
-              { value: '$350+', label: 'Starting Price' },
-            ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-2xl font-black text-white tracking-tight">{stat.value}</div>
-                <div className="text-zinc-600 text-xs uppercase tracking-[0.2em] mt-1">{stat.label}</div>
-              </div>
-            ))}
+          <p className="text-zinc-400 text-lg max-w-lg leading-relaxed">
+            Custom 1/10 scale RC builds, precision 3D printed bodies, and chassis mods. Every build is engineered from the ground up.
+          </p>
+
+          <div className="flex flex-wrap justify-center gap-4">
+            <a href="mailto:paul@apexforgerc.com"
+              className="group flex items-center gap-3 bg-[#FF6B00] text-black font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-[0_0_40px_rgba(255,107,0,0.25)]">
+              Start a Build
+              <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            </a>
+            <button onClick={() => navigate('/dashboard')}
+              className="flex items-center gap-3 bg-white/5 border border-white/10 text-white font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white/10 hover:border-white/20 transition-all duration-300">
+              Owner Portal <Wrench size={16} />
+            </button>
           </div>
+        </div>
+
+        {/* Stats row */}
+        <div className="relative z-10 flex flex-wrap justify-center gap-12 mt-16 pt-12 border-t border-white/5 w-full max-w-3xl">
+          {[
+            { value: '1/10', label: 'Scale Specialist' },
+            { value: 'BND + RTR', label: 'Build Options' },
+            { value: 'Bambu P1S', label: 'Print Quality' },
+            { value: '$350+', label: 'Starting Price' },
+          ].map((stat) => (
+            <div key={stat.label} className="text-center">
+              <div className="text-2xl font-black text-white tracking-tight">{stat.value}</div>
+              <div className="text-zinc-600 text-xs uppercase tracking-[0.2em] mt-1">{stat.label}</div>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -90,10 +89,8 @@ export default function Home() {
             </a>
           </div>
 
-          {/* Bento grid */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
 
-            {/* Large card */}
             <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[320px] hover:border-[#FF6B00]/20 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
@@ -108,7 +105,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Small card */}
             <div className="md:col-span-5 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[320px] hover:border-[#FF6B00]/20 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
@@ -123,7 +119,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Small card */}
             <div className="md:col-span-5 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[260px] hover:border-[#FF6B00]/20 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
@@ -138,7 +133,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* CTA card */}
             <div
               onClick={() => window.location.href = 'mailto:paul@apexforgerc.com'}
               className="md:col-span-7 bg-[#FF6B00] rounded-3xl p-10 flex flex-col justify-between min-h-[260px] cursor-pointer hover:bg-[#FF6B00]/90 transition-all duration-300 group"
