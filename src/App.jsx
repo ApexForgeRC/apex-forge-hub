@@ -1,9 +1,67 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ChevronRight, Wrench, Printer, Car, Hammer, ArrowUpRight } from 'lucide-react';
+import { ChevronRight, Wrench, Printer, Car, Hammer, ArrowUpRight, Settings2 } from 'lucide-react';
+
+// ─── Shop Data ────────────────────────────────────────────────────────────────
+const PRODUCTS = [
+  { id: 'dks-basic',  name: 'DKS Basic',  basePrice: 89,  tagline: 'Entry-level DKS platform. All the precision, none of the fluff.' },
+  { id: 'dks-cramer', name: 'DKS Cramer', basePrice: 129, tagline: 'Pro-spec Cramer edition. Built tougher, configured to your race setup.' },
+];
+
+const PARTS = ['Chassis', 'Body Shell', 'Wheel Hubs'];
+
+const PART_COLORS = {
+  'Chassis':    ['Stealth Black', 'Arctic White', 'Raw Natural', 'Gunmetal'],
+  'Body Shell': ['Stealth Black', 'Arctic White', 'Race Red', 'Ocean Blue', 'Apex Orange', 'Strike Yellow', 'Viper Green', 'Silver'],
+  'Wheel Hubs': ['Stealth Black', 'Arctic White', 'Race Red', 'Ocean Blue', 'Apex Orange', 'Silver'],
+};
+
+const MATERIALS = ['PLA', 'PLA+', 'PETG', 'Carbon-Fiber PETG', 'ABS', 'TPU'];
+const MATERIAL_UPCHARGES = { 'PLA': 0, 'PLA+': 3, 'PETG': 5, 'Carbon-Fiber PETG': 10, 'ABS': 7, 'TPU': 8 };
+
+const makeInitialConfig = () =>
+  Object.fromEntries(
+    PRODUCTS.map(p => [
+      p.id,
+      { expanded: false, parts: Object.fromEntries(PARTS.map(part => [part, { color: PART_COLORS[part][0], material: 'PLA' }])) },
+    ])
+  );
 
 export default function Home() {
   const navigate = useNavigate();
+  const [shopConfig, setShopConfig] = useState(makeInitialConfig);
+
+  const calcPrice = (productId, basePrice) => {
+    const cfg = shopConfig[productId];
+    return basePrice + PARTS.reduce((sum, part) => sum + (MATERIAL_UPCHARGES[cfg.parts[part].material] || 0), 0);
+  };
+
+  const toggleExpand = (productId) =>
+    setShopConfig(prev => ({ ...prev, [productId]: { ...prev[productId], expanded: !prev[productId].expanded } }));
+
+  const updatePart = (productId, part, field, value) =>
+    setShopConfig(prev => ({
+      ...prev,
+      [productId]: { ...prev[productId], parts: { ...prev[productId].parts, [part]: { ...prev[productId].parts[part], [field]: value } } },
+    }));
+
+  const buildMailto = (product, cfg) => {
+    const partLines = PARTS.map(part => {
+      const { color, material } = cfg.parts[part];
+      const up = MATERIAL_UPCHARGES[material];
+      return `  \u2022 ${part}: ${color} / ${material}${up > 0 ? ` (+$${up})` : ''}`;
+    }).join('\n');
+    const total = calcPrice(product.id, product.basePrice);
+    const body = [
+      `Hi Paul,`, ``,
+      `I'd like to order the following build:`, ``,
+      `Product: ${product.name}`, ``,
+      `Configuration:`, partLines, ``,
+      `Estimated Total: $${total}`, ``,
+      `Please confirm availability and next steps. Thanks!`,
+    ].join('\n');
+    return `mailto:info@apexforgerc.com?subject=${encodeURIComponent(`Order Inquiry \u2014 ${product.name}`)}&body=${encodeURIComponent(body)}`;
+  };
 
   return (
     <div className="min-h-screen bg-[#080808] text-white font-sans">
@@ -16,6 +74,7 @@ export default function Home() {
         <div className="hidden md:flex items-center gap-8">
           <a href="#services" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Services</a>
           <a href="#builds" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Builds</a>
+          <a href="#shop" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Shop</a>
           <a href="mailto:paul@apexforgerc.com" className="group flex items-center gap-2 bg-[#FF6B00] text-black font-black px-5 py-2.5 rounded-full text-xs uppercase tracking-wider hover:bg-[#FF6B00]/90 transition-all">
             Get a Quote <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </a>
@@ -141,6 +200,103 @@ export default function Home() {
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-black font-black text-sm">paul@apexforgerc.com</span>
+                <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors">
+                  <ArrowUpRight className="text-black" size={20} />
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Shop — Configure Your Build */}
+      <section id="shop" className="px-8 py-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between mb-12">
+            <div>
+              <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">Configure & Order</p>
+              <h2 className="text-5xl font-black uppercase tracking-tighter">Shop</h2>
+            </div>
+            <a href="mailto:info@apexforgerc.com" className="hidden md:flex items-center gap-2 text-zinc-500 hover:text-white text-sm font-bold uppercase tracking-widest transition-colors">
+              Custom quote <ArrowUpRight size={16} />
+            </a>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+            {PRODUCTS.map(product => {
+              const cfg = shopConfig[product.id];
+              const totalPrice = calcPrice(product.id, product.basePrice);
+              const upchargesTotal = totalPrice - product.basePrice;
+              return (
+                <div key={product.id} className={`bg-[#141414] border rounded-3xl p-10 flex flex-col transition-all duration-300 ${cfg.expanded ? 'border-[#FF6B00]/40' : 'border-white/5 hover:border-[#FF6B00]/20'}`}>
+                  <div className="flex items-start justify-between mb-6">
+                    <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center">
+                      <Settings2 className="text-[#FF6B00]" size={24} />
+                    </div>
+                    <div className="text-right">
+                      <div className="text-[#FF6B00] font-black text-2xl">${totalPrice}</div>
+                      {upchargesTotal > 0 && <div className="text-zinc-600 text-xs font-mono">base ${product.basePrice} + ${upchargesTotal}</div>}
+                    </div>
+                  </div>
+                  <h3 className="text-2xl font-black uppercase tracking-tight mb-2">{product.name}</h3>
+                  <p className="text-zinc-500 text-sm leading-relaxed mb-6">{product.tagline}</p>
+
+                  {!cfg.expanded && (
+                    <div className="mt-auto pt-6 border-t border-white/5">
+                      <button onClick={() => toggleExpand(product.id)} className="flex items-center justify-between w-full text-[#FF6B00] font-black text-sm uppercase tracking-wider hover:text-white transition-colors">
+                        Configure Your Build <ChevronRight size={16} />
+                      </button>
+                    </div>
+                  )}
+
+                  {cfg.expanded && (
+                    <>
+                      <div className="space-y-5 border-t border-white/5 pt-6">
+                        {PARTS.map(part => (
+                          <div key={part}>
+                            <p className="text-zinc-400 text-xs font-bold uppercase tracking-[0.2em] mb-2">{part}</p>
+                            <div className="grid grid-cols-2 gap-2">
+                              <select value={cfg.parts[part].color} onChange={e => updatePart(product.id, part, 'color', e.target.value)} className="bg-[#080808] border border-white/10 text-white text-xs px-3 py-2.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer">
+                                {PART_COLORS[part].map(c => <option key={c} value={c}>{c}</option>)}
+                              </select>
+                              <select value={cfg.parts[part].material} onChange={e => updatePart(product.id, part, 'material', e.target.value)} className="bg-[#080808] border border-white/10 text-white text-xs px-3 py-2.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer">
+                                {MATERIALS.map(m => <option key={m} value={m}>{m}{MATERIAL_UPCHARGES[m] > 0 ? ` +$${MATERIAL_UPCHARGES[m]}` : ''}</option>)}
+                              </select>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-6 pt-6 border-t border-white/5">
+                        <div className="flex items-baseline justify-between mb-5">
+                          <div>
+                            <div className="text-zinc-600 text-xs uppercase tracking-[0.2em]">Base ${product.basePrice}</div>
+                            {upchargesTotal > 0 && <div className="text-zinc-500 text-xs font-mono">+ ${upchargesTotal} material upcharges</div>}
+                          </div>
+                          <div className="text-3xl font-black text-[#FF6B00]">${totalPrice}</div>
+                        </div>
+                        <a href={buildMailto(product, cfg)} className="group/btn flex items-center justify-center gap-2 w-full bg-[#FF6B00] text-black font-black px-6 py-3.5 rounded-2xl text-sm uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(255,107,0,0.2)]">
+                          Order This Build <ArrowUpRight size={14} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                        </a>
+                        <button onClick={() => toggleExpand(product.id)} className="w-full text-center text-zinc-700 text-xs uppercase tracking-[0.2em] mt-3 hover:text-zinc-400 transition-colors">
+                          Cancel
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Fully Custom Quote */}
+            <div onClick={() => window.location.href = 'mailto:info@apexforgerc.com'} className="md:col-span-2 bg-[#FF6B00] rounded-3xl p-10 flex flex-col justify-between min-h-[200px] cursor-pointer hover:bg-[#FF6B00]/90 transition-all duration-300 group">
+              <div>
+                <h3 className="text-3xl font-black uppercase tracking-tight text-black mb-3">Fully Custom Quote</h3>
+                <p className="text-black/60 text-sm leading-relaxed max-w-md">Don't see exactly what you need? Every build is different. Reach out and we'll spec it out together — no commitment required.</p>
+              </div>
+              <div className="flex items-center justify-between mt-6">
+                <span className="text-black font-black text-sm">info@apexforgerc.com</span>
                 <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors">
                   <ArrowUpRight className="text-black" size={20} />
                 </div>
