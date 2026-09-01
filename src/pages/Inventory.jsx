@@ -1,18 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Package, Plus, Trash2, AlertTriangle, Search, Filter, DollarSign, Wrench, Cpu, CircleDot, Battery, Box, X, Edit3, Check } from 'lucide-react'
-
-const loadFromStorage = (key, defaultValue) => {
-  try {
-    const saved = localStorage.getItem(key)
-    return saved ? JSON.parse(saved) : defaultValue
-  } catch {
-    return defaultValue
-  }
-}
-
-const saveToStorage = (key, value) => {
-  localStorage.setItem(key, JSON.stringify(value))
-}
+import { sanityClient } from '../sanityClient'
 
 // Category structure with subcategories
 const CATEGORIES = {
@@ -122,7 +110,8 @@ const CONDITION_OPTIONS = ['New', 'Like New', 'Good', 'Fair', 'For Parts']
 const SOURCE_OPTIONS = ['Bambu Lab', 'Amazon', 'AMain Hobbies', 'Tower Hobbies', 'Race Dawg RC', 'eBay', 'Local Hobby Shop', 'Donated/Salvaged', 'Other US Supplier']
 
 export default function Inventory() {
-  const [items, setItems] = useState(() => loadFromStorage('afrc_inventory', []))
+  const [items, setItems] = useState([])
+  const [loading, setLoading] = useState(true)
   const [showAddForm, setShowAddForm] = useState(false)
   const [editingItem, setEditingItem] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
@@ -145,7 +134,31 @@ export default function Inventory() {
     purchaseDate: '',
   })
 
-  useEffect(() => { saveToStorage('afrc_inventory', items) }, [items])
+  // Fetch from Sanity on component mount
+  useEffect(() => {
+    let isMounted = true
+    async function fetchInventory() {
+      try {
+        const query = `*[_type == "inventoryItem"] | order(_createdAt desc)`
+        const data = await sanityClient.fetch(query)
+        if (isMounted) {
+          // Normalize Sanity's _id field to match your existing id structures
+          const normalizedData = data.map(item => ({
+            ...item,
+            id: item._id,
+            isEquipment: item.category === 'equipment' || item.category === 'assets'
+          }))
+          setItems(normalizedData)
+          setLoading(false)
+        }
+      } catch (error) {
+        console.error('Sanity fetch error:', error)
+        if (isMounted) setLoading(false)
+      }
+    }
+    fetchInventory()
+    return () => { isMounted = false }
+  }, [])
 
   const resetForm = () => {
     setFormData({
@@ -183,7 +196,7 @@ export default function Inventory() {
         item.id === editingItem.id ? { ...item, ...itemData } : item
       ))
     } else {
-      setItems([{ ...itemData, id: Date.now(), createdAt: new Date().toISOString() }, ...items])
+      setItems([{ ...itemData, id: Date.now().toString(), createdAt: new Date().toISOString() }, ...items])
     }
     
     resetForm()
@@ -223,17 +236,25 @@ export default function Inventory() {
   // Filtering
   const filteredItems = items.filter(item => {
     const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.subcategory?.toLowerCase().includes(searchQuery.toLowerCase())
+                          item.subcategory?.toLowerCase().includes(searchQuery.toLowerCase())
     const matchesCategory = filterCategory === 'all' || item.category === filterCategory
     return matchesSearch && matchesCategory
   })
 
   // Stats
   const totalValue = items.reduce((sum, item) => sum + (item.cost * item.quantity), 0)
-  const equipmentValue = items.filter(i => i.isEquipment).reduce((sum, item) => sum + item.cost, 0)
+  const equipmentValue = items.filter(i => i.isEquipment).reduce((sum, item) => sum + (item.cost * item.quantity), 0)
   const lowStockItems = items.filter(item => item.lowStockThreshold && item.quantity <= item.lowStockThreshold)
   const inventoryItems = filteredItems.filter(i => !i.isEquipment)
   const equipmentItems = filteredItems.filter(i => i.isEquipment)
+
+  if (loading) {
+    return (
+      <div className="text-center py-16 bg-apex-gray/30 rounded-xl border border-white/10">
+        <p className="text-gray-400">Loading live database records from Sanity...</p>
+      </div>
+    )
+  }
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -294,6 +315,9 @@ export default function Inventory() {
       {/* Add/Edit Form */}
       {showAddForm && (
         <div className="card border-apex-orange/30">
+          <div className="bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs p-2 rounded mb-4">
+            Notice: Edits here affect UI state only. Use Sanity Studio to permanently alter the cloud data.
+          </div>
           <h3 className="font-semibold text-lg mb-4 flex items-center gap-2">
             <Package className="w-5 h-5 text-apex-orange" />
             {editingItem ? 'Edit Item' : 'Add New Item'}
@@ -497,7 +521,7 @@ export default function Inventory() {
         <div className="text-center py-16 bg-apex-gray/30 rounded-xl border border-dashed border-white/10">
           <Package className="w-12 h-12 text-gray-600 mx-auto mb-4" />
           <p className="text-gray-500">No items found</p>
-          <p className="text-gray-600 text-sm">Add your first item to get started</p>
+          <p className="text-gray-600 text-sm">Add documents inside Sanity Studio to populate the live list</p>
         </div>
       ) : (
         <div className="space-y-3">
@@ -538,31 +562,29 @@ export default function Inventory() {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    {/* Quantity Controls (for non-equipment) */}
-                    {!item.isEquipment && (
-                      <div className="flex items-center gap-2">
-                        <button
-                          onClick={() => updateQuantity(item.id, -1)}
-                          className="w-8 h-8 rounded-lg bg-apex-gray-light hover:bg-apex-gray flex items-center justify-center"
-                        >
-                          -
-                        </button>
-                        <span className="w-12 text-center font-mono font-bold text-lg">{item.quantity}</span>
-                        <button
-                          onClick={() => updateQuantity(item.id, 1)}
-                          className="w-8 h-8 rounded-lg bg-apex-gray-light hover:bg-apex-gray flex items-center justify-center"
-                        >
-                          +
-                        </button>
-                      </div>
-                    )}
+                    {/* Quantity Controls */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => updateQuantity(item.id, -1)}
+                        className="w-8 h-8 rounded-lg bg-apex-gray-light hover:bg-apex-gray flex items-center justify-center"
+                      >
+                        -
+                      </button>
+                      <span className="w-12 text-center font-mono font-bold text-lg">{item.quantity}</span>
+                      <button
+                        onClick={() => updateQuantity(item.id, 1)}
+                        className="w-8 h-8 rounded-lg bg-apex-gray-light hover:bg-apex-gray flex items-center justify-center"
+                      >
+                        +
+                      </button>
+                    </div>
 
                     {/* Value */}
                     <div className="text-right">
                       <div className="text-lg font-bold text-apex-orange font-mono">
-                        ${(item.cost * (item.isEquipment ? 1 : item.quantity)).toFixed(2)}
+                        ${(item.cost * item.quantity).toFixed(2)}
                       </div>
-                      {!item.isEquipment && item.quantity > 1 && (
+                      {item.quantity > 1 && (
                         <div className="text-xs text-gray-500">${item.cost.toFixed(2)} ea</div>
                       )}
                     </div>
