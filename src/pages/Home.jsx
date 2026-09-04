@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ChevronRight, Wrench, Printer, Car, Hammer, ArrowUpRight, Settings2 } from 'lucide-react';
 
 // ─── Shop Data ────────────────────────────────────────────────────────────────
@@ -28,7 +27,6 @@ const makeInitialConfig = () =>
   );
 
 export default function Home() {
-  const navigate = useNavigate();
   const [shopConfig, setShopConfig] = useState(makeInitialConfig);
 
   const calcPrice = (productId, basePrice) => {
@@ -73,7 +71,7 @@ export default function Home() {
         </span>
         <div className="hidden md:flex items-center gap-8">
           <a href="#services" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Services</a>
-          <a href="#builds" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Builds</a>
+          <a href="#reforged" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Reforged</a>
           <a href="#shop" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Shop</a>
           <a href="mailto:paul@apexforgerc.com" className="group flex items-center gap-2 bg-[#FF6B00] text-black font-black px-5 py-2.5 rounded-full text-xs uppercase tracking-wider hover:bg-[#FF6B00]/90 transition-all">
             Get a Quote <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -83,129 +81,148 @@ export default function Home() {
 
       {/* Hero */}
       <section className="min-h-screen flex flex-col justify-end pb-20 px-8 pt-32 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#FF6B00] opacity-[0.04] blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2" />
-        <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#FF6B00] opacity-[0.03] blur-[100px] rounded-full -translate-x-1/2 translate-y-1/2" />
+        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#FF6B00] opacity-[0.05] blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#FF6B00] opacity-[0.03] blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,107,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,107,0,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
         <div className="max-w-7xl mx-auto w-full relative z-10">
-          <div className="flex flex-col gap-6 max-w-5xl">
-            <div className="flex items-center gap-3">
+          <div className="max-w-6xl">
+            <div className="flex items-center gap-3 mb-7">
               <div className="w-2 h-2 rounded-full bg-[#FF6B00] animate-pulse" />
-              <span className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em]">Atlanta, Georgia // Est. 2024</span>
+              <span className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em]">
+                Atlanta, Georgia // RC Repair + Rebuild
+              </span>
             </div>
 
-            <h1 className="text-[clamp(4rem,12vw,10rem)] font-black leading-[0.9] tracking-tighter uppercase">
-              Built<br />
-              Different<span className="text-[#FF6B00]">.</span>
+            <h1 className="text-[clamp(3.6rem,10vw,8.5rem)] font-black leading-[0.88] tracking-tighter uppercase">
+              Repair<span className="text-[#FF6B00]">.</span><br />
+              Rebuild<span className="text-[#FF6B00]">.</span><br />
+              Reforge<span className="text-[#FF6B00]">.</span>
             </h1>
 
-            <p className="text-zinc-400 text-lg max-w-lg leading-relaxed">
-              Custom 1/10 scale RC builds, precision 3D printed bodies, and chassis modifications — built to your spec in Atlanta, GA.
+            <p className="text-zinc-400 text-lg md:text-xl max-w-2xl leading-relaxed mt-8">
+              RC repair, restoration, custom rebuilds and fabricated parts. From a broken drivetrain to a full teardown, Apex Forge brings machines back the right way.
             </p>
 
-            <div className="flex flex-wrap gap-4 pt-4">
-              <a href="mailto:paul@apexforgerc.com"
-                className="group flex items-center gap-3 bg-[#FF6B00] text-black font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-[0_0_40px_rgba(255,107,0,0.25)]">
-                Start a Build
-                <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
+            <div className="flex flex-wrap gap-4 mt-8">
+              <a
+                href="mailto:paul@apexforgerc.com?subject=RC%20Repair%20Quote"
+                className="group flex items-center gap-3 bg-[#FF6B00] text-black font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-[0_0_40px_rgba(255,107,0,0.25)]"
+              >
+                Get a Repair Quote
+                <ArrowUpRight size={17} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
               </a>
-              <button onClick={() => navigate('/dashboard')}
-                className="flex items-center gap-3 bg-white/5 border border-white/10 text-white font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white/10 hover:border-white/20 transition-all duration-300">
-                Owner Portal <Wrench size={16} />
-              </button>
+              <a
+                href="#services"
+                className="flex items-center gap-3 bg-white/5 border border-white/10 text-white font-black px-8 py-4 rounded-full text-sm uppercase tracking-wider hover:bg-white/10 hover:border-white/20 transition-all duration-300"
+              >
+                Explore Services
+                <ChevronRight size={17} />
+              </a>
             </div>
           </div>
 
-          {/* Stats row */}
-          <div className="flex flex-wrap gap-12 mt-20 pt-12 border-t border-white/5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-20 pt-10 border-t border-white/5">
             {[
-              { value: '1/10', label: 'Scale Specialist' },
-              { value: 'BND + RTR', label: 'Build Options' },
-              { value: 'Bambu P1S', label: 'Print Quality' },
-              { value: '$350+', label: 'Starting Price' },
+              { value: 'Repair', label: 'Diagnose + Fix' },
+              { value: 'Rebuild', label: 'Tear Down + Restore' },
+              { value: 'Reforged', label: 'Apex-Built Machines' },
+              { value: 'Fabricate', label: '3D Printed Solutions' },
             ].map((stat) => (
-              <div key={stat.label}>
-                <div className="text-2xl font-black text-white tracking-tight">{stat.value}</div>
-                <div className="text-zinc-600 text-xs uppercase tracking-[0.2em] mt-1">{stat.label}</div>
+              <div key={stat.value}>
+                <div className="text-xl md:text-2xl font-black text-white uppercase tracking-tight">{stat.value}</div>
+                <div className="text-zinc-600 text-[10px] md:text-xs uppercase tracking-[0.18em] mt-1">{stat.label}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Services — Bento Grid */}
-      <section id="services" className="px-8 py-24">
+      {/* Services */}
+      <section id="services" className="px-8 py-24 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div>
-              <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">What We Do</p>
-              <h2 className="text-5xl font-black uppercase tracking-tighter">Services</h2>
+              <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">What Apex Forge Does</p>
+              <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter">Built Around The Work.</h2>
+              <p className="text-zinc-500 max-w-2xl mt-4 leading-relaxed">
+                No blanket parts cannon. We inspect the vehicle, find the problem, preserve what still works, and build the repair around what the machine actually needs.
+              </p>
             </div>
-            <a href="mailto:paul@apexforgerc.com" className="hidden md:flex items-center gap-2 text-zinc-500 hover:text-white text-sm font-bold uppercase tracking-widest transition-colors">
-              All inquiries <ArrowUpRight size={16} />
+            <a
+              href="mailto:paul@apexforgerc.com?subject=RC%20Service%20Inquiry"
+              className="hidden md:flex items-center gap-2 text-zinc-500 hover:text-white text-sm font-bold uppercase tracking-widest transition-colors"
+            >
+              Start an inquiry <ArrowUpRight size={16} />
             </a>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-
-            <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[320px] hover:border-[#FF6B00]/20 transition-all duration-300 group">
+            <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[330px] hover:border-[#FF6B00]/30 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
-                  <Car className="text-[#FF6B00]" size={24} />
+                  <Wrench className="text-[#FF6B00]" size={24} />
                 </div>
-                <h3 className="text-2xl font-black uppercase tracking-tight mb-3">Complete Builds</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed max-w-sm">Full 1/10 scale RC builds, chassis to body. Hobbywing electronics, 3D printed components. BND or RTR — your choice.</p>
+                <p className="text-[#FF6B00] text-[10px] font-black uppercase tracking-[0.25em] mb-3">01 // Repair</p>
+                <h3 className="text-3xl font-black uppercase tracking-tight mb-3">Troubleshoot. Repair. Test.</h3>
+                <p className="text-zinc-500 leading-relaxed max-w-xl">
+                  Drivetrain failures, differentials, electronics, steering, worn components and general RC problems. Diagnosis starts with the failure you actually brought in.
+                </p>
               </div>
               <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                <span className="text-[#FF6B00] font-black text-sm">From $350 BND / $400 RTR</span>
+                <span className="text-zinc-400 font-bold text-sm">Job-based pricing // Parts sourced as needed</span>
                 <ArrowUpRight className="text-zinc-700 group-hover:text-[#FF6B00] transition-colors" size={20} />
               </div>
             </div>
 
-            <div className="md:col-span-5 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[320px] hover:border-[#FF6B00]/20 transition-all duration-300 group">
-              <div>
-                <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
-                  <Printer className="text-[#FF6B00]" size={24} />
-                </div>
-                <h3 className="text-2xl font-black uppercase tracking-tight mb-3">3D Printed Parts</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed">Custom bodies, brackets, and components. TPU, PLA+, PETG. Precision tolerances for RC fitment.</p>
-              </div>
-              <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                <span className="text-[#FF6B00] font-black text-sm">Priced per project</span>
-                <ArrowUpRight className="text-zinc-700 group-hover:text-[#FF6B00] transition-colors" size={20} />
-              </div>
-            </div>
-
-            <div className="md:col-span-5 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[260px] hover:border-[#FF6B00]/20 transition-all duration-300 group">
+            <div className="md:col-span-5 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[330px] hover:border-[#FF6B00]/30 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
                   <Hammer className="text-[#FF6B00]" size={24} />
                 </div>
-                <h3 className="text-2xl font-black uppercase tracking-tight mb-3">Chassis Mods & Repair</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed">ESC installs, connector upgrades, custom mods. Arrma, DKS, and more.</p>
+                <p className="text-[#FF6B00] text-[10px] font-black uppercase tracking-[0.25em] mb-3">02 // Rebuild</p>
+                <h3 className="text-2xl font-black uppercase tracking-tight mb-3">Bring The Dead Ones Back.</h3>
+                <p className="text-zinc-500 leading-relaxed">
+                  Full teardown, inspection, cleaning, replacement of worn or failed parts, reassembly, tuning and test-running for vehicles worth saving.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-white/5 text-zinc-400 font-bold text-sm">
+                Restoration // Refresh // Resurrection
+              </div>
+            </div>
+
+            <div id="reforged" className="md:col-span-5 bg-[#FF6B00] rounded-3xl p-10 flex flex-col justify-between min-h-[290px] text-black group">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-black/10 flex items-center justify-center mb-6">
+                  <Car className="text-black" size={24} />
+                </div>
+                <p className="text-black/60 text-[10px] font-black uppercase tracking-[0.25em] mb-3">03 // Reforged</p>
+                <h3 className="text-3xl font-black uppercase tracking-tight mb-3">Reforged By Apex.</h3>
+                <p className="text-black/65 leading-relaxed">
+                  Donor and project RCs torn down, rebuilt, upgraded where it matters, tuned and tested before they earn the Apex name.
+                </p>
+              </div>
+              <div className="pt-6 border-t border-black/15 text-sm font-black uppercase tracking-wider">
+                Inspected / Rebuilt / Tuned / Tested
+              </div>
+            </div>
+
+            <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[290px] hover:border-[#FF6B00]/30 transition-all duration-300 group">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
+                  <Printer className="text-[#FF6B00]" size={24} />
+                </div>
+                <p className="text-[#FF6B00] text-[10px] font-black uppercase tracking-[0.25em] mb-3">04 // Fabricate</p>
+                <h3 className="text-3xl font-black uppercase tracking-tight mb-3">Print What The Job Needs.</h3>
+                <p className="text-zinc-500 leading-relaxed max-w-xl">
+                  3D printed brackets, mounts, body components, functional parts and custom solutions in materials selected for the application.
+                </p>
               </div>
               <div className="flex items-center justify-between pt-6 border-t border-white/5">
-                <span className="text-[#FF6B00] font-black text-sm">Contact for pricing</span>
+                <span className="text-zinc-400 font-bold text-sm">RC parts // Custom fabrication // Small-run prints</span>
                 <ArrowUpRight className="text-zinc-700 group-hover:text-[#FF6B00] transition-colors" size={20} />
               </div>
             </div>
-
-            <div
-              onClick={() => window.location.href = 'mailto:paul@apexforgerc.com'}
-              className="md:col-span-7 bg-[#FF6B00] rounded-3xl p-10 flex flex-col justify-between min-h-[260px] cursor-pointer hover:bg-[#FF6B00]/90 transition-all duration-300 group"
-            >
-              <div>
-                <h3 className="text-3xl font-black uppercase tracking-tight text-black mb-3">Something Custom?</h3>
-                <p className="text-black/60 text-sm leading-relaxed max-w-sm">Have a specific build or idea in mind? Reach out and we'll make it happen.</p>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-black font-black text-sm">paul@apexforgerc.com</span>
-                <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors">
-                  <ArrowUpRight className="text-black" size={20} />
-                </div>
-              </div>
-            </div>
-
           </div>
         </div>
       </section>
