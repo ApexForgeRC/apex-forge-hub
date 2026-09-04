@@ -1,66 +1,8 @@
-import React, { useState } from 'react';
-import { ChevronRight, Wrench, Printer, Car, Hammer, ArrowUpRight, Settings2 } from 'lucide-react';
-
-// ─── Shop Data ────────────────────────────────────────────────────────────────
-const PRODUCTS = [
-  { id: 'dks-basic',  name: 'DKS Basic',  basePrice: 89,  tagline: 'Entry-level DKS platform. All the precision, none of the fluff.' },
-  { id: 'dks-cramer', name: 'DKS Cramer', basePrice: 129, tagline: 'Pro-spec Cramer edition. Built tougher, configured to your race setup.' },
-];
-
-const PARTS = ['Chassis', 'Body Shell', 'Wheel Hubs'];
-
-const PART_COLORS = {
-  'Chassis':    ['Stealth Black', 'Arctic White', 'Raw Natural', 'Gunmetal'],
-  'Body Shell': ['Stealth Black', 'Arctic White', 'Race Red', 'Ocean Blue', 'Apex Orange', 'Strike Yellow', 'Viper Green', 'Silver'],
-  'Wheel Hubs': ['Stealth Black', 'Arctic White', 'Race Red', 'Ocean Blue', 'Apex Orange', 'Silver'],
-};
-
-const MATERIALS = ['PLA', 'PLA+', 'PETG', 'Carbon-Fiber PETG', 'ABS', 'TPU'];
-const MATERIAL_UPCHARGES = { 'PLA': 0, 'PLA+': 3, 'PETG': 5, 'Carbon-Fiber PETG': 10, 'ABS': 7, 'TPU': 8 };
-
-const makeInitialConfig = () =>
-  Object.fromEntries(
-    PRODUCTS.map(p => [
-      p.id,
-      { expanded: false, parts: Object.fromEntries(PARTS.map(part => [part, { color: PART_COLORS[part][0], material: 'PLA' }])) },
-    ])
-  );
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ChevronRight, Wrench, Printer, Car, Hammer, ArrowUpRight, Package, ShoppingBag } from 'lucide-react';
 
 export default function Home() {
-  const [shopConfig, setShopConfig] = useState(makeInitialConfig);
-
-  const calcPrice = (productId, basePrice) => {
-    const cfg = shopConfig[productId];
-    return basePrice + PARTS.reduce((sum, part) => sum + (MATERIAL_UPCHARGES[cfg.parts[part].material] || 0), 0);
-  };
-
-  const toggleExpand = (productId) =>
-    setShopConfig(prev => ({ ...prev, [productId]: { ...prev[productId], expanded: !prev[productId].expanded } }));
-
-  const updatePart = (productId, part, field, value) =>
-    setShopConfig(prev => ({
-      ...prev,
-      [productId]: { ...prev[productId], parts: { ...prev[productId].parts, [part]: { ...prev[productId].parts[part], [field]: value } } },
-    }));
-
-  const buildMailto = (product, cfg) => {
-    const partLines = PARTS.map(part => {
-      const { color, material } = cfg.parts[part];
-      const up = MATERIAL_UPCHARGES[material];
-      return `  \u2022 ${part}: ${color} / ${material}${up > 0 ? ` (+$${up})` : ''}`;
-    }).join('\n');
-    const total = calcPrice(product.id, product.basePrice);
-    const body = [
-      `Hi Paul,`, ``,
-      `I'd like to order the following build:`, ``,
-      `Product: ${product.name}`, ``,
-      `Configuration:`, partLines, ``,
-      `Estimated Total: $${total}`, ``,
-      `Please confirm availability and next steps. Thanks!`,
-    ].join('\n');
-    return `mailto:info@apexforgerc.com?subject=${encodeURIComponent(`Order Inquiry \u2014 ${product.name}`)}&body=${encodeURIComponent(body)}`;
-  };
-
   return (
     <div className="min-h-screen bg-[#080808] text-white font-sans">
 
@@ -72,7 +14,7 @@ export default function Home() {
         <div className="hidden md:flex items-center gap-8">
           <a href="#services" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Services</a>
           <a href="#reforged" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Reforged</a>
-          <a href="#shop" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Shop</a>
+          <Link to="/parts" className="text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Parts</Link>
           <a href="mailto:paul@apexforgerc.com" className="group flex items-center gap-2 bg-[#FF6B00] text-black font-black px-5 py-2.5 rounded-full text-xs uppercase tracking-wider hover:bg-[#FF6B00]/90 transition-all">
             Get a Quote <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </a>
@@ -227,99 +169,126 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Shop — Configure Your Build */}
-      <section id="shop" className="px-8 py-24">
+      {/* Reforged Showcase */}
+      <section id="reforged-showcase" className="px-8 py-24 border-t border-white/5">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div>
-              <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">Configure & Order</p>
-              <h2 className="text-5xl font-black uppercase tracking-tighter">Shop</h2>
+              <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">Apex Reforged</p>
+              <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter">Machines With A Second Life.</h2>
+              <p className="text-zinc-500 max-w-2xl mt-4 leading-relaxed">
+                Reforged builds start with a used, donor, or project platform and earn their way back through teardown, inspection, rebuild, selective upgrades, tuning, and testing.
+              </p>
             </div>
-            <a href="mailto:info@apexforgerc.com" className="hidden md:flex items-center gap-2 text-zinc-500 hover:text-white text-sm font-bold uppercase tracking-widest transition-colors">
-              Custom quote <ArrowUpRight size={16} />
+            <a href="mailto:paul@apexforgerc.com?subject=Reforged%20Build%20Inquiry" className="text-zinc-500 hover:text-white text-sm font-bold uppercase tracking-widest transition-colors flex items-center gap-2">
+              Ask about a build <ArrowUpRight size={16} />
             </a>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
-            {PRODUCTS.map(product => {
-              const cfg = shopConfig[product.id];
-              const totalPrice = calcPrice(product.id, product.basePrice);
-              const upchargesTotal = totalPrice - product.basePrice;
-              return (
-                <div key={product.id} className={`bg-[#141414] border rounded-3xl p-10 flex flex-col transition-all duration-300 ${cfg.expanded ? 'border-[#FF6B00]/40' : 'border-white/5 hover:border-[#FF6B00]/20'}`}>
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center">
-                      <Settings2 className="text-[#FF6B00]" size={24} />
-                    </div>
-                    <div className="text-right">
-                      <div className="text-[#FF6B00] font-black text-2xl">${totalPrice}</div>
-                      {upchargesTotal > 0 && <div className="text-zinc-600 text-xs font-mono">base ${product.basePrice} + ${upchargesTotal}</div>}
-                    </div>
+          <div className="grid lg:grid-cols-2 gap-4">
+            <article className="bg-[#141414] border border-white/5 rounded-3xl overflow-hidden hover:border-[#FF6B00]/30 transition-colors">
+              <div className="aspect-[16/9] bg-[linear-gradient(135deg,#151515,#090909)] border-b border-white/5 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,107,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,107,0,0.035)_1px,transparent_1px)] bg-[size:36px_36px]" />
+                <div className="relative text-center">
+                  <Car className="w-12 h-12 text-[#FF6B00] mx-auto mb-3" />
+                  <span className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.3em]">Build Photography Placeholder</span>
+                </div>
+              </div>
+              <div className="p-8">
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <span className="text-[#FF6B00] text-[10px] font-black uppercase tracking-[0.25em]">AF-RF-001 // Showcase Build</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest border border-green-500/30 bg-green-500/10 text-green-400 rounded-full px-3 py-1">Running</span>
+                </div>
+                <h3 className="text-3xl font-black uppercase tracking-tight">Senton Reforged</h3>
+                <p className="text-zinc-500 mt-3 leading-relaxed">
+                  Long-wheelbase Arrma project assembled from the parts pool and donor platforms. Currently 3S, with future 4S development planned around a tougher differential setup.
+                </p>
+                <div className="grid grid-cols-2 gap-3 mt-6">
+                  <div className="bg-black/40 border border-white/5 rounded-xl p-4">
+                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Platform</span>
+                    <strong className="text-sm">Arrma Senton</strong>
                   </div>
-                  <h3 className="text-2xl font-black uppercase tracking-tight mb-2">{product.name}</h3>
-                  <p className="text-zinc-500 text-sm leading-relaxed mb-6">{product.tagline}</p>
-
-                  {!cfg.expanded && (
-                    <div className="mt-auto pt-6 border-t border-white/5">
-                      <button onClick={() => toggleExpand(product.id)} className="flex items-center justify-between w-full text-[#FF6B00] font-black text-sm uppercase tracking-wider hover:text-white transition-colors">
-                        Configure Your Build <ChevronRight size={16} />
-                      </button>
-                    </div>
-                  )}
-
-                  {cfg.expanded && (
-                    <>
-                      <div className="space-y-5 border-t border-white/5 pt-6">
-                        {PARTS.map(part => (
-                          <div key={part}>
-                            <p className="text-zinc-400 text-xs font-bold uppercase tracking-[0.2em] mb-2">{part}</p>
-                            <div className="grid grid-cols-2 gap-2">
-                              <select value={cfg.parts[part].color} onChange={e => updatePart(product.id, part, 'color', e.target.value)} className="bg-[#080808] border border-white/10 text-white text-xs px-3 py-2.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer">
-                                {PART_COLORS[part].map(c => <option key={c} value={c}>{c}</option>)}
-                              </select>
-                              <select value={cfg.parts[part].material} onChange={e => updatePart(product.id, part, 'material', e.target.value)} className="bg-[#080808] border border-white/10 text-white text-xs px-3 py-2.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer">
-                                {MATERIALS.map(m => <option key={m} value={m}>{m}{MATERIAL_UPCHARGES[m] > 0 ? ` +$${MATERIAL_UPCHARGES[m]}` : ''}</option>)}
-                              </select>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="mt-6 pt-6 border-t border-white/5">
-                        <div className="flex items-baseline justify-between mb-5">
-                          <div>
-                            <div className="text-zinc-600 text-xs uppercase tracking-[0.2em]">Base ${product.basePrice}</div>
-                            {upchargesTotal > 0 && <div className="text-zinc-500 text-xs font-mono">+ ${upchargesTotal} material upcharges</div>}
-                          </div>
-                          <div className="text-3xl font-black text-[#FF6B00]">${totalPrice}</div>
-                        </div>
-                        <a href={buildMailto(product, cfg)} className="group/btn flex items-center justify-center gap-2 w-full bg-[#FF6B00] text-black font-black px-6 py-3.5 rounded-2xl text-sm uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-[0_0_30px_rgba(255,107,0,0.2)]">
-                          Order This Build <ArrowUpRight size={14} className="group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
-                        </a>
-                        <button onClick={() => toggleExpand(product.id)} className="w-full text-center text-zinc-700 text-xs uppercase tracking-[0.2em] mt-3 hover:text-zinc-400 transition-colors">
-                          Cancel
-                        </button>
-                      </div>
-                    </>
-                  )}
+                  <div className="bg-black/40 border border-white/5 rounded-xl p-4">
+                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Current Power</span>
+                    <strong className="text-sm">3S Brushless</strong>
+                  </div>
                 </div>
-              );
-            })}
+              </div>
+            </article>
 
-            {/* Fully Custom Quote */}
-            <div onClick={() => window.location.href = 'mailto:info@apexforgerc.com'} className="md:col-span-2 bg-[#FF6B00] rounded-3xl p-10 flex flex-col justify-between min-h-[200px] cursor-pointer hover:bg-[#FF6B00]/90 transition-all duration-300 group">
+            <article className="bg-[#141414] border border-white/5 rounded-3xl overflow-hidden hover:border-[#FF6B00]/30 transition-colors">
+              <div className="aspect-[16/9] bg-[linear-gradient(135deg,#151515,#090909)] border-b border-white/5 flex items-center justify-center relative overflow-hidden">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,107,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,107,0,0.035)_1px,transparent_1px)] bg-[size:36px_36px]" />
+                <div className="relative text-center">
+                  <Wrench className="w-12 h-12 text-[#FF6B00] mx-auto mb-3" />
+                  <span className="text-zinc-600 text-[10px] font-black uppercase tracking-[0.3em]">Project Photography Placeholder</span>
+                </div>
+              </div>
+              <div className="p-8">
+                <div className="flex items-center justify-between gap-4 mb-4">
+                  <span className="text-[#FF6B00] text-[10px] font-black uppercase tracking-[0.25em]">AF-RF-002 // In Development</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest border border-[#FF6B00]/30 bg-[#FF6B00]/10 text-[#FF6B00] rounded-full px-3 py-1">Project</span>
+                </div>
+                <h3 className="text-3xl font-black uppercase tracking-tight">Halfraction 3S</h3>
+                <p className="text-zinc-500 mt-3 leading-relaxed">
+                  A 3S Halfraction project using the Arrma Vendetta as the donor foundation with existing Infraction body hardware and an intentionally low new-cash build strategy.
+                </p>
+                <div className="grid grid-cols-2 gap-3 mt-6">
+                  <div className="bg-black/40 border border-white/5 rounded-xl p-4">
+                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Foundation</span>
+                    <strong className="text-sm">Arrma Vendetta</strong>
+                  </div>
+                  <div className="bg-black/40 border border-white/5 rounded-xl p-4">
+                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Target</span>
+                    <strong className="text-sm">3S Halfraction</strong>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      {/* Shop Gateways */}
+      <section id="shop" className="px-8 py-24 border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">Parts + Printed Goods</p>
+          <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-12">Get What The Project Needs.</h2>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link to="/parts" className="group bg-[#141414] border border-white/5 rounded-3xl p-10 min-h-[280px] flex flex-col justify-between hover:border-[#FF6B00]/30 transition-all">
               <div>
-                <h3 className="text-3xl font-black uppercase tracking-tight text-black mb-3">Fully Custom Quote</h3>
-                <p className="text-black/60 text-sm leading-relaxed max-w-md">Don't see exactly what you need? Every build is different. Reach out and we'll spec it out together — no commitment required.</p>
-              </div>
-              <div className="flex items-center justify-between mt-6">
-                <span className="text-black font-black text-sm">info@apexforgerc.com</span>
-                <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center group-hover:bg-black/20 transition-colors">
-                  <ArrowUpRight className="text-black" size={20} />
+                <div className="w-12 h-12 rounded-2xl bg-[#FF6B00]/10 flex items-center justify-center mb-6">
+                  <Package className="text-[#FF6B00]" size={24} />
                 </div>
+                <p className="text-[#FF6B00] text-[10px] font-black uppercase tracking-[0.25em] mb-3">Parts Catalog</p>
+                <h3 className="text-3xl font-black uppercase tracking-tight">Repair + Rebuild Parts</h3>
+                <p className="text-zinc-500 mt-3 max-w-md leading-relaxed">
+                  Search the working Arrma parts catalog for repair, rebuild, and project components. Current catalog pricing uses the Apex parts markup model.
+                </p>
               </div>
-            </div>
+              <div className="flex items-center justify-between pt-6 border-t border-white/5 mt-8">
+                <span className="font-black uppercase tracking-wider text-sm">Browse Parts</span>
+                <ArrowUpRight className="text-zinc-700 group-hover:text-[#FF6B00] transition-colors" size={20} />
+              </div>
+            </Link>
 
+            <a href="https://apexforgemotorsports.etsy.com" target="_blank" rel="noopener noreferrer" className="group bg-[#FF6B00] rounded-3xl p-10 min-h-[280px] flex flex-col justify-between text-black">
+              <div>
+                <div className="w-12 h-12 rounded-2xl bg-black/10 flex items-center justify-center mb-6">
+                  <ShoppingBag className="text-black" size={24} />
+                </div>
+                <p className="text-black/60 text-[10px] font-black uppercase tracking-[0.25em] mb-3">Printed Goods</p>
+                <h3 className="text-3xl font-black uppercase tracking-tight">Apex Forge On Etsy</h3>
+                <p className="text-black/65 mt-3 max-w-md leading-relaxed">
+                  Motorsports, RC, diecast, display, bench, and functional printed products. The catalog will grow as original and commercially licensed designs are ready.
+                </p>
+              </div>
+              <div className="flex items-center justify-between pt-6 border-t border-black/15 mt-8">
+                <span className="font-black uppercase tracking-wider text-sm">Visit Etsy</span>
+                <ArrowUpRight size={20} />
+              </div>
+            </a>
           </div>
         </div>
       </section>
