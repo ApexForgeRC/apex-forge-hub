@@ -175,9 +175,9 @@ export default function Home() {
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-12">
             <div>
               <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">Apex Reforged</p>
-              <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter">Machines With A Second Life.</h2>
+              <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter">Not Restored. Reforged.</h2>
               <p className="text-zinc-500 max-w-2xl mt-4 leading-relaxed">
-                Reforged builds start with a used, donor, or project platform and earn their way back through teardown, inspection, rebuild, selective upgrades, tuning, and testing.
+                Project RC platforms rebuilt with purpose — torn down, inspected, cleaned, upgraded where it matters, tuned, and tested to Apex standards.
               </p>
             </div>
             <a href="mailto:paul@apexforgerc.com?subject=Reforged%20Build%20Inquiry" className="text-zinc-500 hover:text-white text-sm font-bold uppercase tracking-widest transition-colors flex items-center gap-2">
@@ -201,7 +201,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-3xl font-black uppercase tracking-tight">Senton Reforged</h3>
                 <p className="text-zinc-500 mt-3 leading-relaxed">
-                  Long-wheelbase Arrma project assembled from the parts pool and donor platforms. Currently 3S, with future 4S development planned around a tougher differential setup.
+                  A long-wheelbase Arrma build reworked into a cleaner, tougher 3S setup with a focus on balance, durability, and real-world drivability. Built from the chassis up, tuned on the bench, and developed with future 4S capability in mind.
                 </p>
                 <div className="grid grid-cols-2 gap-3 mt-6">
                   <div className="bg-black/40 border border-white/5 rounded-xl p-4">
@@ -229,9 +229,9 @@ export default function Home() {
                   <span className="text-[#FF6B00] text-[10px] font-black uppercase tracking-[0.25em]">AF-RF-002 // In Development</span>
                   <span className="text-[10px] font-black uppercase tracking-widest border border-[#FF6B00]/30 bg-[#FF6B00]/10 text-[#FF6B00] rounded-full px-3 py-1">Project</span>
                 </div>
-                <h3 className="text-3xl font-black uppercase tracking-tight">Halfraction 3S</h3>
+                <h3 className="text-3xl font-black uppercase tracking-tight">1/2Faction 3S</h3>
                 <p className="text-zinc-500 mt-3 leading-relaxed">
-                  A 3S Halfraction project using the Arrma Vendetta as the donor foundation with existing Infraction body hardware and an intentionally low new-cash build strategy.
+                  A low-slung custom Arrma Infraction project combining street-truck proportions, 3D-printed fabrication, and a deliberately compact 3S setup. Built to create something distinctive without overcomplicating the platform.
                 </p>
                 <div className="grid grid-cols-2 gap-3 mt-6">
                   <div className="bg-black/40 border border-white/5 rounded-xl p-4">
