@@ -292,4 +292,27 @@ Submitted: ${new Date().toLocaleString()}`;
                   rows={3}
                   value={form.notes}
                   onChange={(e) => updateField('notes', e.target.value)}
-                  placeholder="Deadline? S
+                  placeholder="Deadline? Special color request? Anything else I should know?"
+                  className="w-full bg-apex-black border border-neutral-700 focus:border-apex-orange text-titanium px-3 py-2 outline-none resize-y transition-colors"
+                />
+              </div>
+            </div>
+
+            <div className="border-t-2 border-apex-orange bg-apex-black p-5">
+              <div className="flex justify-between items-baseline mb-4">
+                <span className="font-mono text-xs tracking-widest text-neutral-500 uppercase">Estimated Total</span>
+                <span className="font-cinzel text-3xl text-apex-orange">${subtotal.toFixed(2)}</span>
+              </div>
+              <button
+                type="submit"
+                className="w-full bg-apex-orange hover:bg-orange-400 text-apex-black font-bold tracking-widest py-3 transition-colors"
+              >
+                SUBMIT ORDER REQUEST
+              </button>
+            </div>
+          </form>
+        )}
+      </div>
+    </>
+  );
+}

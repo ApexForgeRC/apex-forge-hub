@@ -89,7 +89,7 @@ export default function Sidebar({ isOpen, onClose }) {
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/5">
           <div className="text-xs text-gray-600 text-center">
             <p>Apex Forge RC</p>
-            <p className="text-gray-700">Original Motorworks</p>
+            <p className="text-gray-700">Repair • Rebuild • Reforge</p>
           </div>
         </div>
       </aside>
