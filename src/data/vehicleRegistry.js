@@ -10,6 +10,8 @@ export const VEHICLE_REGISTRY = [
     source: 'Horizon Hobby',
     sourceUrl: 'https://www.horizonhobby.com/product/1-10-senton-3s-4x4-rtr-brushless-short-course-truck/ARA4303V3.html',
     explodedViewUrl: 'https://www.horizonhobby.com/interactive-exploded-view?pid=ARA4303V3',
+    imageUrl: 'https://www.horizonhobby.com/on/demandware.static/-/Sites-horizon-master/default/dw2fec9645/Images/ARA/ARA4303V3_A7_YGOFKHV0.jpg',
+    imageSource: 'Horizon Hobby',
     aliases: ['senton', 'senton 3s', 'senton v3', 'ara4303v3'],
   },
 ];
