@@ -141,7 +141,7 @@ export default function Home() {
                 <p className="text-black/60 text-[10px] font-black uppercase tracking-[0.25em] mb-3">03 // Reforged</p>
                 <h3 className="text-3xl font-black uppercase tracking-tight mb-3">Reforged By Apex.</h3>
                 <p className="text-black/65 leading-relaxed">
-                  Donor and project RCs torn down, rebuilt, upgraded where it matters, tuned and tested before they earn the Apex name.
+                  Project RCs torn down, rebuilt, upgraded where it matters, tuned and tested before they earn the Apex name.
                 </p>
               </div>
               <div className="pt-6 border-t border-black/15 text-sm font-black uppercase tracking-wider">
