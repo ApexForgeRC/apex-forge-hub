@@ -22,12 +22,12 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <section className="min-h-screen flex flex-col justify-end pb-20 px-8 pt-32 relative overflow-hidden">
+      <section className="min-h-screen flex flex-col justify-end pb-20 px-8 pt-32 relative overflow-hidden blueprint-grid">
         <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-[#E10600] opacity-[0.05] blur-[150px] rounded-full translate-x-1/2 -translate-y-1/2" />
         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-[#E10600] opacity-[0.03] blur-[120px] rounded-full -translate-x-1/2 translate-y-1/2" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(225,6,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(225,6,0,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
-        <div className="max-w-7xl mx-auto w-full relative z-10">
+        <div className="max-w-7xl mx-auto w-full relative z-10 grid lg:grid-cols-[1.08fr_0.92fr] gap-12 items-end">
           <div className="max-w-6xl">
             <div className="flex items-center gap-3 mb-7">
               <div className="w-2 h-2 rounded-full bg-[#E10600] animate-pulse" />
@@ -64,7 +64,63 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mt-20 pt-10 border-t border-white/5">
+          <div className="hidden lg:block blueprint-panel relative min-h-[520px] p-7 overflow-hidden">
+            <div className="flex items-center justify-between text-[9px] uppercase tracking-[0.28em] text-zinc-600 font-mono">
+              <span>AF // CHASSIS STUDY</span>
+              <span className="text-[#E10600]">REV 01</span>
+            </div>
+
+            <svg viewBox="0 0 760 460" className="w-full mt-8 text-zinc-400" role="img" aria-label="Apex Forge technical RC chassis study">
+              <g fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="145" cy="285" r="78" />
+                <circle cx="615" cy="285" r="78" />
+                <circle cx="145" cy="285" r="48" opacity=".45" />
+                <circle cx="615" cy="285" r="48" opacity=".45" />
+                <path d="M205 272 L285 230 L490 230 L555 270" />
+                <path d="M265 310 L495 310" />
+                <path d="M292 230 L345 165 L450 165 L490 230" />
+                <path d="M338 165 L360 120 L423 120 L450 165" />
+                <path d="M205 270 L265 310 M555 270 L495 310" opacity=".7" />
+                <path d="M235 220 L302 282 M525 220 L458 282" opacity=".5" />
+                <rect x="350" y="244" width="95" height="46" rx="8" opacity=".8" />
+                <circle cx="395" cy="267" r="18" />
+              </g>
+
+              <g fill="none" stroke="#E10600" strokeWidth="3">
+                <path d="M350 267 H445" />
+                <circle cx="395" cy="267" r="7" />
+              </g>
+
+              <g fill="none" stroke="#71717a" strokeWidth="1.5" strokeDasharray="6 8" opacity=".75">
+                <path d="M145 105 V385" />
+                <path d="M615 105 V385" />
+                <path d="M92 390 H668" />
+                <path d="M98 380 L92 390 L98 400 M662 380 L668 390 L662 400" />
+              </g>
+
+              <g fill="#71717a" fontFamily="monospace" fontSize="16">
+                <text x="335" y="422">WHEELBASE // VARIABLE</text>
+                <text x="282" y="95">POWER MODULE</text>
+                <text x="24" y="180">FRONT AXLE</text>
+                <text x="610" y="180">REAR AXLE</text>
+              </g>
+            </svg>
+
+            <div className="absolute left-7 bottom-7 right-7 grid grid-cols-3 gap-3">
+              {[
+                ['01', 'Inspect'],
+                ['02', 'Rebuild'],
+                ['03', 'Reforge'],
+              ].map(([n, label]) => (
+                <div key={n} className="border-t border-white/10 pt-3">
+                  <span className="block text-[#E10600] text-[10px] font-black font-mono">{n}</span>
+                  <span className="text-zinc-500 text-[10px] uppercase tracking-[0.2em]">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="lg:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-6 mt-8 lg:mt-16 pt-10 border-t border-white/5">
             {[
               { value: 'Repair', label: 'Diagnose + Fix' },
               { value: 'Rebuild', label: 'Tear Down + Restore' },
@@ -100,7 +156,7 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
-            <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[330px] hover:border-[#E10600]/30 transition-all duration-300 group">
+            <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl blueprint-card p-10 flex flex-col justify-between min-h-[330px] hover:border-[#E10600]/30 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#E10600]/10 flex items-center justify-center mb-6">
                   <Wrench className="text-[#E10600]" size={24} />
@@ -117,7 +173,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="md:col-span-5 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[330px] hover:border-[#E10600]/30 transition-all duration-300 group">
+            <div className="md:col-span-5 bg-[#141414] border border-white/5 rounded-3xl blueprint-card p-10 flex flex-col justify-between min-h-[330px] hover:border-[#E10600]/30 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#E10600]/10 flex items-center justify-center mb-6">
                   <Hammer className="text-[#E10600]" size={24} />
@@ -149,7 +205,7 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl p-10 flex flex-col justify-between min-h-[290px] hover:border-[#E10600]/30 transition-all duration-300 group">
+            <div className="md:col-span-7 bg-[#141414] border border-white/5 rounded-3xl blueprint-card p-10 flex flex-col justify-between min-h-[290px] hover:border-[#E10600]/30 transition-all duration-300 group">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#E10600]/10 flex items-center justify-center mb-6">
                   <Printer className="text-[#E10600]" size={24} />
@@ -186,7 +242,7 @@ export default function Home() {
           </div>
 
           <div className="grid lg:grid-cols-2 gap-4">
-            <article className="bg-[#141414] border border-white/5 rounded-3xl overflow-hidden hover:border-[#E10600]/30 transition-colors">
+            <article className="bg-[#141414] border border-white/5 rounded-3xl blueprint-card overflow-hidden hover:border-[#E10600]/30 transition-colors">
               <div className="aspect-[16/9] bg-[linear-gradient(135deg,#151515,#090909)] border-b border-white/5 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(225,6,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(225,6,0,0.035)_1px,transparent_1px)] bg-[size:36px_36px]" />
                 <div className="relative text-center">
@@ -216,7 +272,7 @@ export default function Home() {
               </div>
             </article>
 
-            <article className="bg-[#141414] border border-white/5 rounded-3xl overflow-hidden hover:border-[#E10600]/30 transition-colors">
+            <article className="bg-[#141414] border border-white/5 rounded-3xl blueprint-card overflow-hidden hover:border-[#E10600]/30 transition-colors">
               <div className="aspect-[16/9] bg-[linear-gradient(135deg,#151515,#090909)] border-b border-white/5 flex items-center justify-center relative overflow-hidden">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(225,6,0,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(225,6,0,0.035)_1px,transparent_1px)] bg-[size:36px_36px]" />
                 <div className="relative text-center">
@@ -235,12 +291,12 @@ export default function Home() {
                 </p>
                 <div className="grid grid-cols-2 gap-3 mt-6">
                   <div className="bg-black/40 border border-white/5 rounded-xl p-4">
-                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Foundation</span>
-                    <strong className="text-sm">Arrma Vendetta</strong>
+                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Platform</span>
+                    <strong className="text-sm">Arrma Infraction</strong>
                   </div>
                   <div className="bg-black/40 border border-white/5 rounded-xl p-4">
-                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Target</span>
-                    <strong className="text-sm">3S Halfraction</strong>
+                    <span className="block text-zinc-600 text-[10px] uppercase tracking-widest">Build</span>
+                    <strong className="text-sm">1/2Faction 3S</strong>
                   </div>
                 </div>
               </div>
@@ -256,7 +312,7 @@ export default function Home() {
           <h2 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-12">Get What The Project Needs.</h2>
 
           <div className="grid md:grid-cols-2 gap-4">
-            <Link to="/parts" className="group bg-[#141414] border border-white/5 rounded-3xl p-10 min-h-[280px] flex flex-col justify-between hover:border-[#E10600]/30 transition-all">
+            <Link to="/parts" className="group bg-[#141414] border border-white/5 rounded-3xl blueprint-card p-10 min-h-[280px] flex flex-col justify-between hover:border-[#E10600]/30 transition-all">
               <div>
                 <div className="w-12 h-12 rounded-2xl bg-[#E10600]/10 flex items-center justify-center mb-6">
                   <Package className="text-[#E10600]" size={24} />
