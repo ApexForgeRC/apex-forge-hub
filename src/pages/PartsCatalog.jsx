@@ -9,7 +9,7 @@ const ETSY_URL = 'https://apexforgemotorsports.etsy.com';
 function stockBadge(stock) {
   if (stock === 'In stock') return { label: 'In Stock', className: 'text-green-400 border-green-400/30 bg-green-400/10' };
   if (stock === 'Sold out') return { label: 'Sold Out', className: 'text-zinc-500 border-zinc-600/30 bg-zinc-600/10' };
-  return { label: stock || 'Contact', className: 'text-[#FF6B00] border-[#FF6B00]/30 bg-[#FF6B00]/10' };
+  return { label: stock || 'Contact', className: 'text-[#E10600] border-[#E10600]/30 bg-[#E10600]/10' };
 }
 
 function partMatchesVehicle(part, vehicle) {
@@ -68,14 +68,14 @@ export default function PartsCatalog({ cart, onOpenCart }) {
 
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-[#080808]/80 backdrop-blur-md border-b border-white/5">
         <Link to="/" className="flex items-center gap-3 text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">
-          <ArrowLeft size={14} /> Apex <span className="text-[#FF6B00]">Forge</span> RC
+          <ArrowLeft size={14} /> Apex <span className="text-[#E10600]">Forge</span> RC
         </Link>
         <div className="flex items-center gap-6">
           <a href={ETSY_URL} target="_blank" rel="noopener noreferrer" className="hidden md:block text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">Etsy</a>
           <button onClick={onOpenCart} className="relative text-zinc-500 hover:text-white transition-colors" aria-label="Open cart">
             <ShoppingCart size={18} />
             {itemCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#FF6B00] text-black text-[10px] font-black rounded-full w-4 h-4 flex items-center justify-center">{itemCount}</span>
+              <span className="absolute -top-2 -right-2 bg-[#E10600] text-black text-[10px] font-black rounded-full w-4 h-4 flex items-center justify-center">{itemCount}</span>
             )}
           </button>
         </div>
@@ -83,7 +83,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
 
       <section className="px-8 pt-32 pb-10">
         <div className="max-w-7xl mx-auto">
-          <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">Repair + Rebuild Parts</p>
+          <p className="text-[#E10600] text-xs font-bold uppercase tracking-[0.3em] mb-3">Repair + Rebuild Parts</p>
           <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-4">Find The Part.</h1>
           <p className="text-zinc-500 text-sm max-w-2xl leading-relaxed">
             Search the catalog directly or start with the RC on your bench. Vehicle fitment, source data, stock, and pricing stay under the hood so the lookup stays fast and simple.
@@ -100,7 +100,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                     setVehicleId(e.target.value);
                     setCategory('All');
                   }}
-                  className="w-full appearance-none bg-[#141414] border border-white/10 text-white text-sm pl-11 pr-4 py-3.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer"
+                  className="w-full appearance-none bg-[#141414] border border-white/10 text-white text-sm pl-11 pr-4 py-3.5 rounded-xl focus:border-[#E10600] outline-none transition-colors cursor-pointer"
                 >
                   <option value="All">All vehicles</option>
                   {VEHICLE_REGISTRY.map(vehicle => (
@@ -120,7 +120,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Part name, platform, fitment..."
-                  className="w-full bg-[#141414] border border-white/10 text-white text-sm pl-11 pr-4 py-3.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors"
+                  className="w-full bg-[#141414] border border-white/10 text-white text-sm pl-11 pr-4 py-3.5 rounded-xl focus:border-[#E10600] outline-none transition-colors"
                 />
               </div>
             </div>
@@ -130,7 +130,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
               <select
                 value={category}
                 onChange={e => setCategory(e.target.value)}
-                className="bg-[#141414] border border-white/10 text-white text-sm px-4 py-3.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer min-w-56"
+                className="bg-[#141414] border border-white/10 text-white text-sm px-4 py-3.5 rounded-xl focus:border-[#E10600] outline-none transition-colors cursor-pointer min-w-56"
               >
                 <option value="All">All categories</option>
                 {PART_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
@@ -139,10 +139,10 @@ export default function PartsCatalog({ cart, onOpenCart }) {
           </div>
 
           {selectedVehicle && (
-            <div className="mt-5 bg-[#111] border border-[#FF6B00]/20 rounded-2xl px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="mt-5 bg-[#111] border border-[#E10600]/20 rounded-2xl px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
               <div className="flex items-start gap-3">
-                <div className="w-9 h-9 rounded-xl bg-[#FF6B00]/10 flex items-center justify-center shrink-0">
-                  <Database size={17} className="text-[#FF6B00]" />
+                <div className="w-9 h-9 rounded-xl bg-[#E10600]/10 flex items-center justify-center shrink-0">
+                  <Database size={17} className="text-[#E10600]" />
                 </div>
                 <div>
                   <p className="text-white text-sm font-black uppercase tracking-wide">{selectedVehicle.brand} {selectedVehicle.name}</p>
@@ -153,7 +153,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                 href={selectedVehicle.explodedViewUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[#FF6B00] hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
+                className="flex items-center gap-2 text-[#E10600] hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
               >
                 Official Exploded View <ExternalLink size={13} />
               </a>
@@ -194,7 +194,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                 const soldOut = part.stock === 'Sold out';
                 const added = justAdded === part.id;
                 return (
-                  <div key={part.id} className="bg-[#141414] border border-white/5 rounded-2xl p-6 flex flex-col justify-between hover:border-[#FF6B00]/20 transition-all duration-300">
+                  <div key={part.id} className="bg-[#141414] border border-white/5 rounded-2xl p-6 flex flex-col justify-between hover:border-[#E10600]/20 transition-all duration-300">
                     <div>
                       <div className="flex items-start justify-between gap-3 mb-3">
                         <span className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.2em]">{part.category}</span>
@@ -206,7 +206,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                     </div>
                     <div className="flex items-center justify-between pt-4 border-t border-white/5">
                       <div>
-                        <span className="block text-[#FF6B00] font-black text-xl">${part.sellPrice.toFixed(2)}</span>
+                        <span className="block text-[#E10600] font-black text-xl">${part.sellPrice.toFixed(2)}</span>
                         <span className="text-zinc-700 text-[9px] uppercase tracking-widest">Apex price</span>
                       </div>
                       <button
@@ -217,7 +217,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                             ? 'bg-white/5 text-zinc-600 cursor-not-allowed'
                             : added
                               ? 'bg-green-400 text-black'
-                              : 'bg-[#FF6B00] text-black hover:bg-white'
+                              : 'bg-[#E10600] text-black hover:bg-white'
                         }`}
                       >
                         {soldOut ? 'Sold Out' : added ? <><Check size={14} /> Added</> : 'Add to Cart'}
@@ -234,7 +234,7 @@ export default function PartsCatalog({ cart, onOpenCart }) {
       <footer className="border-t border-white/5 px-8 py-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <Link to="/" className="font-black text-lg tracking-tighter uppercase">
-            Apex <span className="text-[#FF6B00]">Forge</span> RC
+            Apex <span className="text-[#E10600]">Forge</span> RC
           </Link>
           <div className="flex items-center gap-8 text-zinc-600 text-xs font-bold uppercase tracking-[0.2em]">
             <a href="mailto:paul@apexforgerc.com" className="hover:text-white transition-colors">Email</a>
