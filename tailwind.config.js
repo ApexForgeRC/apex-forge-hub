@@ -7,9 +7,9 @@ export default {
   theme: {
     extend: {
       colors: {
-        'apex-orange': '#FF6B00',
-        'apex-orange-light': '#ff8533',
-        'apex-orange-dark': '#cc5500',
+        'apex-orange': '#E10600',
+        'apex-orange-light': '#ff3b35',
+        'apex-orange-dark': '#a60400',
         'apex-black': '#080808',
         'apex-dark': '#0f0f0f',
         'apex-gray': '#1a1a1a',
