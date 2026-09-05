@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft, Search, ShoppingCart, Check, ExternalLink } from 'lucide-react';
+import { ArrowLeft, Search, ShoppingCart, Check, ExternalLink, CarFront, Database } from 'lucide-react';
 import { PARTS, PART_CATEGORIES } from '../data/parts';
+import { VEHICLE_REGISTRY } from '../data/vehicleRegistry';
 
 const ETSY_URL = 'https://apexforgemotorsports.etsy.com';
 
@@ -11,24 +12,42 @@ function stockBadge(stock) {
   return { label: stock || 'Contact', className: 'text-[#FF6B00] border-[#FF6B00]/30 bg-[#FF6B00]/10' };
 }
 
+function partMatchesVehicle(part, vehicle) {
+  if (!vehicle) return true;
+  const haystack = `${part.platform} ${part.fits} ${part.fullName}`.toLowerCase();
+  return vehicle.aliases.some(alias => haystack.includes(alias.toLowerCase()));
+}
+
 export default function PartsCatalog({ cart, onOpenCart }) {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('All');
+  const [vehicleId, setVehicleId] = useState('All');
   const [justAdded, setJustAdded] = useState(null);
   const itemCount = cart?.itemCount ?? 0;
 
+  const selectedVehicle = VEHICLE_REGISTRY.find(v => v.id === vehicleId) || null;
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+
     return PARTS.filter(p => {
+      const matchesVehicle = partMatchesVehicle(p, selectedVehicle);
       const matchesCategory = category === 'All' || p.category === category;
       const matchesQuery = !q ||
         p.fullName.toLowerCase().includes(q) ||
         p.platform.toLowerCase().includes(q) ||
         p.fits.toLowerCase().includes(q) ||
         p.category.toLowerCase().includes(q);
-      return matchesCategory && matchesQuery;
+
+      return matchesVehicle && matchesCategory && matchesQuery;
     });
-  }, [query, category]);
+  }, [query, category, selectedVehicle]);
+
+  const stats = useMemo(() => {
+    const inStock = filtered.filter(p => p.stock === 'In stock').length;
+    const categories = new Set(filtered.map(p => p.category)).size;
+    return { inStock, categories };
+  }, [filtered]);
 
   const addToCart = (part) => {
     cart?.addItem({
@@ -47,7 +66,6 @@ export default function PartsCatalog({ cart, onOpenCart }) {
   return (
     <div className="min-h-screen bg-[#080808] text-white font-sans">
 
-      {/* Nav */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-8 py-4 bg-[#080808]/80 backdrop-blur-md border-b border-white/5">
         <Link to="/" className="flex items-center gap-3 text-zinc-500 hover:text-white text-xs font-bold uppercase tracking-[0.2em] transition-colors">
           <ArrowLeft size={14} /> Apex <span className="text-[#FF6B00]">Forge</span> RC
@@ -63,45 +81,112 @@ export default function PartsCatalog({ cart, onOpenCart }) {
         </div>
       </nav>
 
-      {/* Header */}
-      <section className="px-8 pt-32 pb-12">
+      <section className="px-8 pt-32 pb-10">
         <div className="max-w-7xl mx-auto">
           <p className="text-[#FF6B00] text-xs font-bold uppercase tracking-[0.3em] mb-3">Repair + Rebuild Parts</p>
-          <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-4">Parts Catalog</h1>
-          <p className="text-zinc-500 text-sm max-w-xl leading-relaxed">
-            Genuine and take-off Arrma parts for the Big Rock / Granite / Senton / Typhon / Vorteks family — sourced in bulk, priced for project use.
-            Growing as I find more.
+          <h1 className="text-5xl md:text-6xl font-black uppercase tracking-tighter mb-4">Find The Part.</h1>
+          <p className="text-zinc-500 text-sm max-w-2xl leading-relaxed">
+            Search the catalog directly or start with the RC on your bench. Vehicle fitment, source data, stock, and pricing stay under the hood so the lookup stays fast and simple.
           </p>
 
-          {/* Search + filter */}
-          <div className="flex flex-col md:flex-row gap-3 mt-10">
-            <div className="relative flex-1">
-              <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600" />
-              <input
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-                placeholder="Search parts, platform, or what it fits..."
-                className="w-full bg-[#141414] border border-white/10 text-white text-sm pl-11 pr-4 py-3 rounded-xl focus:border-[#FF6B00] outline-none transition-colors"
-              />
+          <div className="grid lg:grid-cols-[1fr_1fr_auto] gap-3 mt-10">
+            <div>
+              <label className="block text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Vehicle</label>
+              <div className="relative">
+                <CarFront size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" />
+                <select
+                  value={vehicleId}
+                  onChange={e => {
+                    setVehicleId(e.target.value);
+                    setCategory('All');
+                  }}
+                  className="w-full appearance-none bg-[#141414] border border-white/10 text-white text-sm pl-11 pr-4 py-3.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer"
+                >
+                  <option value="All">All vehicles</option>
+                  {VEHICLE_REGISTRY.map(vehicle => (
+                    <option key={vehicle.id} value={vehicle.id}>
+                      {vehicle.brand} {vehicle.shortName} — {vehicle.sku}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <select
-              value={category}
-              onChange={e => setCategory(e.target.value)}
-              className="bg-[#141414] border border-white/10 text-white text-sm px-4 py-3 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer md:w-64"
-            >
-              <option value="All">All Categories</option>
-              {PART_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
-            </select>
+
+            <div>
+              <label className="block text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Search</label>
+              <div className="relative">
+                <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-zinc-600" />
+                <input
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Part name, platform, fitment..."
+                  className="w-full bg-[#141414] border border-white/10 text-white text-sm pl-11 pr-4 py-3.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em] mb-2">Category</label>
+              <select
+                value={category}
+                onChange={e => setCategory(e.target.value)}
+                className="bg-[#141414] border border-white/10 text-white text-sm px-4 py-3.5 rounded-xl focus:border-[#FF6B00] outline-none transition-colors cursor-pointer min-w-56"
+              >
+                <option value="All">All categories</option>
+                {PART_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
+              </select>
+            </div>
           </div>
-          <p className="text-zinc-700 text-xs mt-3">{filtered.length} of {PARTS.length} parts</p>
+
+          {selectedVehicle && (
+            <div className="mt-5 bg-[#111] border border-[#FF6B00]/20 rounded-2xl px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+              <div className="flex items-start gap-3">
+                <div className="w-9 h-9 rounded-xl bg-[#FF6B00]/10 flex items-center justify-center shrink-0">
+                  <Database size={17} className="text-[#FF6B00]" />
+                </div>
+                <div>
+                  <p className="text-white text-sm font-black uppercase tracking-wide">{selectedVehicle.brand} {selectedVehicle.name}</p>
+                  <p className="text-zinc-600 text-xs mt-1">SKU {selectedVehicle.sku} · {selectedVehicle.generation} · source reference: {selectedVehicle.source}</p>
+                </div>
+              </div>
+              <a
+                href={selectedVehicle.explodedViewUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-[#FF6B00] hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
+              >
+                Official Exploded View <ExternalLink size={13} />
+              </a>
+            </div>
+          )}
+
+          <div className="grid grid-cols-3 gap-3 mt-5 max-w-xl">
+            <div className="bg-[#101010] border border-white/5 rounded-xl p-3">
+              <span className="block text-zinc-700 text-[9px] uppercase tracking-widest">Results</span>
+              <strong className="text-lg">{filtered.length}</strong>
+            </div>
+            <div className="bg-[#101010] border border-white/5 rounded-xl p-3">
+              <span className="block text-zinc-700 text-[9px] uppercase tracking-widest">In Stock</span>
+              <strong className="text-lg">{stats.inStock}</strong>
+            </div>
+            <div className="bg-[#101010] border border-white/5 rounded-xl p-3">
+              <span className="block text-zinc-700 text-[9px] uppercase tracking-widest">Categories</span>
+              <strong className="text-lg">{stats.categories}</strong>
+            </div>
+          </div>
+
+          {selectedVehicle && (
+            <p className="text-zinc-700 text-[11px] mt-4">
+              Fitment results currently use Apex catalog platform/fitment data. Exact SKU-level verification is the next ingestion layer.
+            </p>
+          )}
         </div>
       </section>
 
-      {/* Grid */}
       <section className="px-8 pb-24">
         <div className="max-w-7xl mx-auto">
           {filtered.length === 0 ? (
-            <div className="text-center py-24 text-zinc-600 text-sm">No parts match that search.</div>
+            <div className="text-center py-24 text-zinc-600 text-sm">No parts match those filters.</div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map(part => {
@@ -120,7 +205,10 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                       <p className="text-zinc-600 text-xs mb-4">Fits: {part.fits}</p>
                     </div>
                     <div className="flex items-center justify-between pt-4 border-t border-white/5">
-                      <span className="text-[#FF6B00] font-black text-xl">${part.sellPrice.toFixed(2)}</span>
+                      <div>
+                        <span className="block text-[#FF6B00] font-black text-xl">${part.sellPrice.toFixed(2)}</span>
+                        <span className="text-zinc-700 text-[9px] uppercase tracking-widest">Apex price</span>
+                      </div>
                       <button
                         onClick={() => !soldOut && addToCart(part)}
                         disabled={soldOut}
@@ -143,7 +231,6 @@ export default function PartsCatalog({ cart, onOpenCart }) {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="border-t border-white/5 px-8 py-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <Link to="/" className="font-black text-lg tracking-tighter uppercase">
