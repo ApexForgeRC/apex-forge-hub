@@ -164,22 +164,15 @@ export default function PartsCatalog({ cart, onOpenCart }) {
                   )}
                 </div>
               </div>
-              <div className="flex md:flex-col gap-3 md:items-end">
-                <a
-                  href={selectedVehicle.explodedViewUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[#FF6B00] hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
-                >
-                  Exploded View <ExternalLink size={13} />
-                </a>
+              <div className="md:text-right">
+                <span className="block text-zinc-700 text-[9px] font-black uppercase tracking-[0.2em] mb-2">Reference data</span>
                 <a
                   href={selectedVehicle.sourceUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-zinc-500 hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
+                  className="inline-flex items-center gap-1.5 text-zinc-600 hover:text-white text-[10px] font-bold uppercase tracking-wider transition-colors"
                 >
-                  Product Page <ExternalLink size={13} />
+                  Manufacturer Reference <ExternalLink size={11} />
                 </a>
               </div>
             </div>
