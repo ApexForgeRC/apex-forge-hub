@@ -139,24 +139,49 @@ export default function PartsCatalog({ cart, onOpenCart }) {
           </div>
 
           {selectedVehicle && (
-            <div className="mt-5 bg-[#111] border border-[#E10600]/20 rounded-2xl px-5 py-4 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="mt-5 bg-[#111] border border-[#E10600]/20 rounded-2xl p-4 grid md:grid-cols-[160px_1fr_auto] gap-4 md:items-center">
+              <div className="bg-white rounded-xl overflow-hidden aspect-[4/3] flex items-center justify-center">
+                {selectedVehicle.imageUrl ? (
+                  <img
+                    src={selectedVehicle.imageUrl}
+                    alt={`${selectedVehicle.brand} ${selectedVehicle.name}`}
+                    className="w-full h-full object-contain"
+                    loading="lazy"
+                  />
+                ) : (
+                  <CarFront size={34} className="text-zinc-700" />
+                )}
+              </div>
               <div className="flex items-start gap-3">
                 <div className="w-9 h-9 rounded-xl bg-[#E10600]/10 flex items-center justify-center shrink-0">
                   <Database size={17} className="text-[#E10600]" />
                 </div>
                 <div>
                   <p className="text-white text-sm font-black uppercase tracking-wide">{selectedVehicle.brand} {selectedVehicle.name}</p>
-                  <p className="text-zinc-600 text-xs mt-1">SKU {selectedVehicle.sku} · {selectedVehicle.generation} · source reference: {selectedVehicle.source}</p>
+                  <p className="text-zinc-600 text-xs mt-1">SKU {selectedVehicle.sku} · {selectedVehicle.generation} · source: {selectedVehicle.source}</p>
+                  {selectedVehicle.imageSource && (
+                    <p className="text-zinc-700 text-[10px] mt-1">Vehicle image: {selectedVehicle.imageSource}</p>
+                  )}
                 </div>
               </div>
-              <a
-                href={selectedVehicle.explodedViewUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 text-[#E10600] hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
-              >
-                Official Exploded View <ExternalLink size={13} />
-              </a>
+              <div className="flex md:flex-col gap-3 md:items-end">
+                <a
+                  href={selectedVehicle.explodedViewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-[#E10600] hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
+                >
+                  Exploded View <ExternalLink size={13} />
+                </a>
+                <a
+                  href={selectedVehicle.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 text-zinc-500 hover:text-white text-xs font-black uppercase tracking-wider transition-colors"
+                >
+                  Product Page <ExternalLink size={13} />
+                </a>
+              </div>
             </div>
           )}
 
