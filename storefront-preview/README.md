@@ -38,6 +38,13 @@ and `node --check storefront-preview/server.cjs` for syntax checks.
 Run `node storefront-preview/prepare-data.cjs` to regenerate the selected data.
 The existing application still uses `npm ci` and `npm run build`.
 
+The `Storefront preview checks` pull-request workflow runs the existing build,
+the seven behavior checks, and Chromium journeys at 1440px desktop and 390px
+mobile widths. It checks navigation, search, filtering, sorting, URL restoration,
+detail-page refresh, empty states, horizontal overflow, and uncaught browser
+errors. Review screenshots are available in its `storefront-preview-review`
+artifact. The workflow has read-only repository permissions and does not deploy.
+
 ## Publication gate
 
 Do not deploy or merge without owner approval. The branch-specific Vercel setting

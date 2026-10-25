@@ -2,7 +2,7 @@ const {defineConfig}=require('@playwright/test');
 module.exports=defineConfig({
   testDir:__dirname,
   testMatch:'browser.spec.cjs',
-  use:{baseURL:'http://127.0.0.1:4178',browserName:'chromium'},
+  use:{baseURL:'http://127.0.0.1:4178',browserName:'chromium',channel:'chrome'},
   webServer:{command:'node server.cjs',cwd:__dirname,url:'http://127.0.0.1:4178',reuseExistingServer:!process.env.CI},
   projects:[
     {name:'desktop',use:{viewport:{width:1440,height:1000}}},
