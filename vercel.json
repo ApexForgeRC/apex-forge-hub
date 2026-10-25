@@ -1,4 +1,5 @@
 {
+  "git": { "deploymentEnabled": { "codex/storefront-preview": false } },
   "headers": [
     {
       "source": "/(.*)",

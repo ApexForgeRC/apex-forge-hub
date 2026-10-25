@@ -1,0 +1,32 @@
+name: Storefront preview checks
+on:
+  pull_request:
+    paths:
+      - 'storefront-preview/**'
+      - '.github/workflows/storefront-preview.yml'
+      - 'vercel.json'
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: node storefront-preview/test.cjs
+      - run: npm install --no-save --package-lock=false @playwright/test
+      - run: google-chrome --version
+      - run: npx playwright test --config storefront-preview/playwright.config.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: storefront-preview-review
+          path: |
+            storefront-preview/screenshots/
+            test-results/
